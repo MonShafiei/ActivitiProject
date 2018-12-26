@@ -58,12 +58,11 @@ public class JobControllerTest {
     }
 
 
-
     @Test
     public void saveNewCandidateGetMethod() throws Exception {
 
         // Create test hiring
-        Candidate candidate = new Candidate("Mohsen","mon1382@yahoo.com","0363561168");
+        Candidate candidate = new Candidate("Mohsen", "mon1382@yahoo.com", "0363561168");
         candidateRepository.save(candidate);
 
         // Start process instance
@@ -100,7 +99,7 @@ public class JobControllerTest {
         taskVariables = new HashMap<String, Object>();
         taskVariables.put("isTechnicalResumeOK", true);
         candidate.setTechnicalInterviewOK(true);
-        taskService.complete(task.getId(),taskVariables);
+        taskService.complete(task.getId(), taskVariables);
 
         task = taskService.createTaskQuery()
                 .processInstanceId(processInstance.getId())
@@ -128,18 +127,21 @@ public class JobControllerTest {
         candidate.setSimpleProjectOK(true);
         taskService.complete(task.getId(), taskVariables);
 
-
-
-
         // Verify email
         //Assert.assertEquals(1, wiser.getMessages().size());
+
+
+        task = taskService.createTaskQuery()
+                .processInstanceId(processInstance.getId())
+                .singleResult();
+        Assert.assertEquals("Get Complete Informatin", task.getName());
+        taskService.complete(task.getId());
+
 
         // Verify process completed
         //Assert.assertEquals(1, historyService.createHistoricProcessInstanceQuery().finished().count());
 
     }
-
-
 
 
 }
