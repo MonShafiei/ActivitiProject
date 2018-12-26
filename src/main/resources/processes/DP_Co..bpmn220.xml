@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://activiti.org/test">
+  <collaboration id="Collaboration">
+    <participant id="DPCompany2" name="DP Co2" processRef="process"></participant>
+  </collaboration>
+  <signal id="CancelSignal" name="Cancel Signal" activiti:scope="global"></signal>
+  <process id="process" name="DP Co2" isExecutable="true">
+    <laneSet id="laneSet_process">
+      <lane id="HumanResource" name="Human Resource">
+        <flowNodeRef>start</flowNodeRef>
+        <flowNodeRef>con1</flowNodeRef>
+        <flowNodeRef>end2</flowNodeRef>
+        <flowNodeRef>SetInterviewTime</flowNodeRef>
+        <flowNodeRef>TakeInterviewWithExam</flowNodeRef>
+        <flowNodeRef>flow3</flowNodeRef>
+        <flowNodeRef>flow14</flowNodeRef>
+        <flowNodeRef>flow4</flowNodeRef>
+        <flowNodeRef>flow11</flowNodeRef>
+        <flowNodeRef>flow2</flowNodeRef>
+        <flowNodeRef>flow1</flowNodeRef>
+        <flowNodeRef>firstConditionTrue</flowNodeRef>
+        <flowNodeRef>firstConditionFalse</flowNodeRef>
+        <flowNodeRef>FirstCheckResume</flowNodeRef>
+        <flowNodeRef>RejectProcess</flowNodeRef>
+        <flowNodeRef>endevent1</flowNodeRef>
+        <flowNodeRef>AcceptProcess</flowNodeRef>
+        <flowNodeRef>endevent2</flowNodeRef>
+        <flowNodeRef>endevent3</flowNodeRef>
+      </lane>
+      <lane id="TechnicalTeam" name="Technical Team">
+        <flowNodeRef>con2</flowNodeRef>
+        <flowNodeRef>SetDateOfInterview</flowNodeRef>
+        <flowNodeRef>TakeAnInterview</flowNodeRef>
+        <flowNodeRef>con3</flowNodeRef>
+        <flowNodeRef>DefineProject</flowNodeRef>
+        <flowNodeRef>con4</flowNodeRef>
+        <flowNodeRef>CheckByTechnicalTeam</flowNodeRef>
+        <flowNodeRef>RunAcceptMethod</flowNodeRef>
+        <flowNodeRef>RunRejectMethod</flowNodeRef>
+        <flowNodeRef>isTechnicalResoumeTrue</flowNodeRef>
+        <flowNodeRef>AcceptByTechnicalTeam</flowNodeRef>
+        <flowNodeRef>AcceptProject</flowNodeRef>
+        <flowNodeRef>flow17</flowNodeRef>
+        <flowNodeRef>flow6</flowNodeRef>
+        <flowNodeRef>flow7</flowNodeRef>
+        <flowNodeRef>flow8</flowNodeRef>
+        <flowNodeRef>DoProject</flowNodeRef>
+        <flowNodeRef>flow9</flowNodeRef>
+        <flowNodeRef>RejectProject</flowNodeRef>
+        <flowNodeRef>RejectByTechnicalTeam</flowNodeRef>
+        <flowNodeRef>isTechnicalResoumeFalse</flowNodeRef>
+        <flowNodeRef>flow16</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="start" name="Start"></startEvent>
+    <userTask id="FirstCheckResume" name="First Check Resume"></userTask>
+    <exclusiveGateway id="con1"></exclusiveGateway>
+    <endEvent id="end2"></endEvent>
+    <userTask id="SetInterviewTime" name="Set Interview Time"></userTask>
+    <userTask id="TakeInterviewWithExam" name="Take Interview with Exam"></userTask>
+    <sequenceFlow id="flow3" sourceRef="SetInterviewTime" targetRef="TakeInterviewWithExam"></sequenceFlow>
+    <sequenceFlow id="flow4" sourceRef="TakeInterviewWithExam" targetRef="CheckByTechnicalTeam"></sequenceFlow>
+    <sequenceFlow id="flow2" sourceRef="FirstCheckResume" targetRef="con1"></sequenceFlow>
+    <sequenceFlow id="flow1" sourceRef="start" targetRef="FirstCheckResume"></sequenceFlow>
+    <sequenceFlow id="firstConditionTrue" name="true" sourceRef="con1" targetRef="SetInterviewTime">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isFirstCondition == true}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="firstConditionFalse" name="Reject" sourceRef="con1" targetRef="end2">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isFirstCondition == false}]]></conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway id="con2"></exclusiveGateway>
+    <userTask id="SetDateOfInterview" name="Set Date of Interview"></userTask>
+    <userTask id="TakeAnInterview" name="Take an Interview"></userTask>
+    <exclusiveGateway id="con3"></exclusiveGateway>
+    <userTask id="DefineProject" name="Define Project"></userTask>
+    <exclusiveGateway id="con4"></exclusiveGateway>
+    <userTask id="CheckByTechnicalTeam" name="Check By Technical Team"></userTask>
+    <serviceTask id="RunAcceptMethod" name="Run Accept Method" activiti:expression="${SendEmail.send()}"></serviceTask>
+    <serviceTask id="RunRejectMethod" name="Run Reject Method" activiti:expression="${SendEmail.send()}"></serviceTask>
+    <sequenceFlow id="isTechnicalResoumeTrue" name="True" sourceRef="con2" targetRef="SetDateOfInterview">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isTechnicalResumeOK == true}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="AcceptByTechnicalTeam" name="Accept" sourceRef="con3" targetRef="RunAcceptMethod">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isTechnicalInterviewOK == true}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="AcceptProject" name="Accept Project" sourceRef="con4" targetRef="RunAcceptMethod">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isSimpleProjectOK == true}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow17" sourceRef="RunRejectMethod" targetRef="RejectProcess"></sequenceFlow>
+    <sequenceFlow id="flow6" sourceRef="CheckByTechnicalTeam" targetRef="con2"></sequenceFlow>
+    <sequenceFlow id="flow7" sourceRef="SetDateOfInterview" targetRef="TakeAnInterview"></sequenceFlow>
+    <sequenceFlow id="flow8" sourceRef="TakeAnInterview" targetRef="con3"></sequenceFlow>
+    <sequenceFlow id="DoProject" name="Do Project" sourceRef="con3" targetRef="DefineProject">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isTechnicalInterviewOK == false && isNeedSimpleProject == true}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow9" sourceRef="DefineProject" targetRef="con4"></sequenceFlow>
+    <sequenceFlow id="RejectProject" name="Reject Project" sourceRef="con4" targetRef="RunRejectMethod">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isSimpleProjectOK == false}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="RejectByTechnicalTeam" name="Reject" sourceRef="con3" targetRef="RunRejectMethod">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isTechnicalInterviewOK == false && isNeedSimpleProject == false}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="isTechnicalResoumeFalse" name="Reject" sourceRef="con2" targetRef="RunRejectMethod">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isTechnicalResumeOK == false}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow16" sourceRef="RunAcceptMethod" targetRef="AcceptProcess"></sequenceFlow>
+    <subProcess id="RejectProcess" name="Reject Process">
+      <userTask id="SayReject" name="Say Reject to Candidate"></userTask>
+      <sequenceFlow id="flow11" sourceRef="SayReject" targetRef="end3"></sequenceFlow>
+      <endEvent id="end3"></endEvent>
+      <startEvent id="startevent1" name="Start"></startEvent>
+      <sequenceFlow id="flow18" sourceRef="startevent1" targetRef="SayReject"></sequenceFlow>
+    </subProcess>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <sequenceFlow id="flow19" sourceRef="RejectProcess" targetRef="endevent1"></sequenceFlow>
+    <subProcess id="AcceptProcess" name="Accept Process">
+      <userTask id="GetCompleteInformatin" name="Get Complete Informatin"></userTask>
+      <sequenceFlow id="flow14" sourceRef="GetCompleteInformatin" targetRef="end4"></sequenceFlow>
+      <endEvent id="end4"></endEvent>
+      <startEvent id="startevent2" name="Start"></startEvent>
+      <serviceTask id="SendAcceptEmailToCandidate" name="Send Accept Email to Candidate" activiti:type="mail">
+        <extensionElements>
+          <activiti:field name="subject">
+            <activiti:string><![CDATA[Your application has been accept]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="from">
+            <activiti:string><![CDATA[info@dpco.com]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="to">
+            <activiti:expression><![CDATA[${candidate.email}]]></activiti:expression>
+          </activiti:field>
+          <activiti:field name="text">
+            <activiti:expression><![CDATA[Dear ${candidate.name}
+
+Your request has been accept.
+Please call to DP co.]]></activiti:expression>
+          </activiti:field>
+        </extensionElements>
+      </serviceTask>
+      <sequenceFlow id="flow22" sourceRef="SendAcceptEmailToCandidate" targetRef="GetCompleteInformatin"></sequenceFlow>
+      <sequenceFlow id="flow23" sourceRef="startevent2" targetRef="SendAcceptEmailToCandidate"></sequenceFlow>
+    </subProcess>
+    <endEvent id="endevent3" name="End"></endEvent>
+    <sequenceFlow id="flow21" sourceRef="AcceptProcess" targetRef="endevent3"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Collaboration">
+    <bpmndi:BPMNPlane bpmnElement="Collaboration" id="BPMNPlane_Collaboration">
+      <bpmndi:BPMNShape bpmnElement="DPCompany2" id="BPMNShape_DPCompany2">
+        <omgdc:Bounds height="442.0" width="1885.0" x="135.0" y="30.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="HumanResource" id="BPMNShape_HumanResource">
+        <omgdc:Bounds height="220.0" width="1855.0" x="165.0" y="30.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TechnicalTeam" id="BPMNShape_TechnicalTeam">
+        <omgdc:Bounds height="221.0" width="1855.0" x="165.0" y="250.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="start" id="BPMNShape_start">
+        <omgdc:Bounds height="35.0" width="35.0" x="211.0" y="76.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="FirstCheckResume" id="BPMNShape_FirstCheckResume">
+        <omgdc:Bounds height="80.0" width="100.0" x="286.0" y="51.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="con1" id="BPMNShape_con1">
+        <omgdc:Bounds height="40.0" width="40.0" x="431.0" y="71.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end2" id="BPMNShape_end2">
+        <omgdc:Bounds height="35.0" width="35.0" x="437.0" y="164.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="SetInterviewTime" id="BPMNShape_SetInterviewTime">
+        <omgdc:Bounds height="80.0" width="100.0" x="540.0" y="51.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TakeInterviewWithExam" id="BPMNShape_TakeInterviewWithExam">
+        <omgdc:Bounds height="80.0" width="100.0" x="750.0" y="51.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="con2" id="BPMNShape_con2">
+        <omgdc:Bounds height="40.0" width="40.0" x="525.0" y="339.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="SetDateOfInterview" id="BPMNShape_SetDateOfInterview">
+        <omgdc:Bounds height="80.0" width="100.0" x="666.0" y="355.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="TakeAnInterview" id="BPMNShape_TakeAnInterview">
+        <omgdc:Bounds height="80.0" width="100.0" x="900.0" y="355.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="con3" id="BPMNShape_con3">
+        <omgdc:Bounds height="40.0" width="40.0" x="1100.0" y="375.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="DefineProject" id="BPMNShape_DefineProject">
+        <omgdc:Bounds height="80.0" width="100.0" x="1266.0" y="355.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="con4" id="BPMNShape_con4">
+        <omgdc:Bounds height="40.0" width="40.0" x="1411.0" y="375.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CheckByTechnicalTeam" id="BPMNShape_CheckByTechnicalTeam">
+        <omgdc:Bounds height="80.0" width="100.0" x="330.0" y="319.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="RunAcceptMethod" id="BPMNShape_RunAcceptMethod">
+        <omgdc:Bounds height="80.0" width="100.0" x="1515.0" y="275.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="RunRejectMethod" id="BPMNShape_RunRejectMethod">
+        <omgdc:Bounds height="80.0" width="100.0" x="870.0" y="255.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="RejectProcess" id="BPMNShape_RejectProcess">
+        <omgdc:Bounds height="135.0" width="291.0" x="950.0" y="51.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="SayReject" id="BPMNShape_SayReject">
+        <omgdc:Bounds height="80.0" width="100.0" x="1040.0" y="80.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end3" id="BPMNShape_end3">
+        <omgdc:Bounds height="35.0" width="35.0" x="1178.0" y="106.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="970.0" y="106.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="1270.0" y="101.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="AcceptProcess" id="BPMNShape_AcceptProcess">
+        <omgdc:Bounds height="161.0" width="551.0" x="1340.0" y="51.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="GetCompleteInformatin" id="BPMNShape_GetCompleteInformatin">
+        <omgdc:Bounds height="80.0" width="100.0" x="1690.0" y="89.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end4" id="BPMNShape_end4">
+        <omgdc:Bounds height="35.0" width="35.0" x="1830.0" y="99.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="startevent2" id="BPMNShape_startevent2">
+        <omgdc:Bounds height="35.0" width="35.0" x="1390.0" y="111.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="SendAcceptEmailToCandidate" id="BPMNShape_SendAcceptEmailToCandidate">
+        <omgdc:Bounds height="68.0" width="105.0" x="1510.0" y="95.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent3" id="BPMNShape_endevent3">
+        <omgdc:Bounds height="35.0" width="35.0" x="1960.0" y="103.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="640.0" y="91.0"></omgdi:waypoint>
+        <omgdi:waypoint x="750.0" y="91.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="800.0" y="131.0"></omgdi:waypoint>
+        <omgdi:waypoint x="618.0" y="271.0"></omgdi:waypoint>
+        <omgdi:waypoint x="379.0" y="271.0"></omgdi:waypoint>
+        <omgdi:waypoint x="380.0" y="319.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="386.0" y="91.0"></omgdi:waypoint>
+        <omgdi:waypoint x="431.0" y="91.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="246.0" y="93.0"></omgdi:waypoint>
+        <omgdi:waypoint x="286.0" y="91.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="firstConditionTrue" id="BPMNEdge_firstConditionTrue">
+        <omgdi:waypoint x="471.0" y="91.0"></omgdi:waypoint>
+        <omgdi:waypoint x="540.0" y="91.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="19.0" x="471.0" y="91.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="firstConditionFalse" id="BPMNEdge_firstConditionFalse">
+        <omgdi:waypoint x="451.0" y="111.0"></omgdi:waypoint>
+        <omgdi:waypoint x="454.0" y="164.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="30.0" x="451.0" y="111.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="isTechnicalResoumeTrue" id="BPMNEdge_isTechnicalResoumeTrue">
+        <omgdi:waypoint x="545.0" y="379.0"></omgdi:waypoint>
+        <omgdi:waypoint x="545.0" y="390.0"></omgdi:waypoint>
+        <omgdi:waypoint x="666.0" y="395.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="22.0" x="545.0" y="374.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="AcceptByTechnicalTeam" id="BPMNEdge_AcceptByTechnicalTeam">
+        <omgdi:waypoint x="1120.0" y="415.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1120.0" y="450.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1590.0" y="450.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1565.0" y="355.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="35.0" x="1120.0" y="410.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="AcceptProject" id="BPMNEdge_AcceptProject">
+        <omgdi:waypoint x="1451.0" y="395.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1565.0" y="391.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1565.0" y="355.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="71.0" x="1451.0" y="390.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
+        <omgdi:waypoint x="920.0" y="255.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1095.0" y="186.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="430.0" y="359.0"></omgdi:waypoint>
+        <omgdi:waypoint x="525.0" y="359.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="766.0" y="395.0"></omgdi:waypoint>
+        <omgdi:waypoint x="900.0" y="395.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="1000.0" y="395.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1100.0" y="395.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="DoProject" id="BPMNEdge_DoProject">
+        <omgdi:waypoint x="1140.0" y="395.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1266.0" y="395.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="49.0" x="1140.0" y="390.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="1366.0" y="395.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1411.0" y="395.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="RejectProject" id="BPMNEdge_RejectProject">
+        <omgdi:waypoint x="1431.0" y="375.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1432.0" y="291.0"></omgdi:waypoint>
+        <omgdi:waypoint x="970.0" y="295.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="66.0" x="1431.0" y="370.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="RejectByTechnicalTeam" id="BPMNEdge_RejectByTechnicalTeam">
+        <omgdi:waypoint x="1120.0" y="375.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1120.0" y="291.0"></omgdi:waypoint>
+        <omgdi:waypoint x="970.0" y="295.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="30.0" x="1120.0" y="370.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="isTechnicalResoumeFalse" id="BPMNEdge_isTechnicalResoumeFalse">
+        <omgdi:waypoint x="545.0" y="339.0"></omgdi:waypoint>
+        <omgdi:waypoint x="545.0" y="291.0"></omgdi:waypoint>
+        <omgdi:waypoint x="870.0" y="295.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="30.0" x="545.0" y="334.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow16" id="BPMNEdge_flow16">
+        <omgdi:waypoint x="1565.0" y="275.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1615.0" y="212.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
+        <omgdi:waypoint x="1140.0" y="120.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1178.0" y="123.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow18" id="BPMNEdge_flow18">
+        <omgdi:waypoint x="1005.0" y="123.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1040.0" y="120.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
+        <omgdi:waypoint x="1241.0" y="118.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1270.0" y="118.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14">
+        <omgdi:waypoint x="1790.0" y="129.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1830.0" y="116.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow22" id="BPMNEdge_flow22">
+        <omgdi:waypoint x="1615.0" y="129.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1690.0" y="129.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow23" id="BPMNEdge_flow23">
+        <omgdi:waypoint x="1425.0" y="128.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1510.0" y="129.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow21" id="BPMNEdge_flow21">
+        <omgdi:waypoint x="1891.0" y="131.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1960.0" y="120.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

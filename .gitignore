@@ -1,0 +1,7 @@
+target/
+.idea/
+Activiti-Employment-2.iml
+/.settings/
+/bin/
+/.classpath
+/.project
