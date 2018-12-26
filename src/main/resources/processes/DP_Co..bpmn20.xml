@@ -121,7 +121,7 @@
             <activiti:expression><![CDATA[${candidate.email}]]></activiti:expression>
           </activiti:field>
           <activiti:field name="from">
-            <activiti:string><![CDATA[info.dpco.com]]></activiti:string>
+            <activiti:string><![CDATA[info@dpco.com]]></activiti:string>
           </activiti:field>
           <activiti:field name="subject">
             <activiti:string><![CDATA[You accept]]></activiti:string>
