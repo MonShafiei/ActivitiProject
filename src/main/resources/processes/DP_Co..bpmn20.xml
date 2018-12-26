@@ -74,8 +74,8 @@
     <userTask id="DefineProject" name="Define Project"></userTask>
     <exclusiveGateway id="con4"></exclusiveGateway>
     <userTask id="CheckByTechnicalTeam" name="Check By Technical Team"></userTask>
-    <serviceTask id="RunAcceptMethod" name="Run Accept Method" activiti:expression="${sendEmail.send()}"></serviceTask>
-    <serviceTask id="RunRejectMethod" name="Run Reject Method" activiti:expression="${sendEmail.send()}"></serviceTask>
+    <serviceTask id="RunAcceptMethod" name="Run Accept Method" activiti:expression="${acceptService.accept()}"></serviceTask>
+    <serviceTask id="RunRejectMethod" name="Run Reject Method" activiti:expression="${rejectService.reject()}"></serviceTask>
     <sequenceFlow id="isTechnicalResoumeTrue" name="True" sourceRef="con2" targetRef="SetDateOfInterview">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isTechnicalResumeOK == true}]]></conditionExpression>
     </sequenceFlow>
@@ -115,7 +115,33 @@
       <userTask id="GetCompleteInformatin" name="Get Complete Informatin"></userTask>
       <sequenceFlow id="flow14" sourceRef="GetCompleteInformatin" targetRef="end4"></sequenceFlow>
       <endEvent id="end4"></endEvent>
-      <sequenceFlow id="flow21" sourceRef="startevent2" targetRef="GetCompleteInformatin"></sequenceFlow>
+      <serviceTask id="SendAcceptMail" name="Send Accept Mail" activiti:type="mail">
+        <extensionElements>
+          <activiti:field name="to">
+            <activiti:expression><![CDATA[${candidate.email}]]></activiti:expression>
+          </activiti:field>
+          <activiti:field name="from">
+            <activiti:string><![CDATA[info.dpco.com]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="subject">
+            <activiti:string><![CDATA[You accept]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="text">
+            <activiti:string><![CDATA[Hello
+Please call to human resource]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="html">
+            <activiti:expression><![CDATA[Dear ${candidate.name} ,
+
+We're happy to inform you that your recent request has been accepted.  We will contact you soon for more information.
+
+Regards,
+DP Co.]]></activiti:expression>
+          </activiti:field>
+        </extensionElements>
+      </serviceTask>
+      <sequenceFlow id="flow21" sourceRef="startevent2" targetRef="SendAcceptMail"></sequenceFlow>
+      <sequenceFlow id="flow22" sourceRef="SendAcceptMail" targetRef="GetCompleteInformatin"></sequenceFlow>
     </subProcess>
     <endEvent id="endevent1" name="End"></endEvent>
     <sequenceFlow id="flow19" sourceRef="RejectProcess" targetRef="endevent1"></sequenceFlow>
@@ -197,10 +223,13 @@
         <omgdc:Bounds height="35.0" width="35.0" x="1310.0" y="103.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="GetCompleteInformatin" id="BPMNShape_GetCompleteInformatin">
-        <omgdc:Bounds height="80.0" width="100.0" x="1460.0" y="81.0"></omgdc:Bounds>
+        <omgdc:Bounds height="80.0" width="100.0" x="1490.0" y="81.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="end4" id="BPMNShape_end4">
-        <omgdc:Bounds height="35.0" width="35.0" x="1600.0" y="103.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="1610.0" y="103.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="SendAcceptMail" id="BPMNShape_SendAcceptMail">
+        <omgdc:Bounds height="80.0" width="105.0" x="1360.0" y="81.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
         <omgdc:Bounds height="35.0" width="35.0" x="1230.0" y="110.0"></omgdc:Bounds>
@@ -215,7 +244,7 @@
       <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
         <omgdi:waypoint x="800.0" y="131.0"></omgdi:waypoint>
         <omgdi:waypoint x="618.0" y="271.0"></omgdi:waypoint>
-        <omgdi:waypoint x="240.0" y="271.0"></omgdi:waypoint>
+        <omgdi:waypoint x="379.0" y="271.0"></omgdi:waypoint>
         <omgdi:waypoint x="380.0" y="314.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
@@ -329,12 +358,16 @@
         <omgdi:waypoint x="990.0" y="121.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14">
-        <omgdi:waypoint x="1560.0" y="121.0"></omgdi:waypoint>
-        <omgdi:waypoint x="1600.0" y="120.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1590.0" y="121.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1610.0" y="120.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow21" id="BPMNEdge_flow21">
         <omgdi:waypoint x="1345.0" y="120.0"></omgdi:waypoint>
-        <omgdi:waypoint x="1460.0" y="121.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1360.0" y="121.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow22" id="BPMNEdge_flow22">
+        <omgdi:waypoint x="1465.0" y="121.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1490.0" y="121.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
         <omgdi:waypoint x="1195.0" y="119.0"></omgdi:waypoint>

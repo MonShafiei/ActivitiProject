@@ -1,6 +1,5 @@
 package org.activiti.web.controller;
 
-import org.activiti.ApplicantRepository;
 import org.activiti.MyApp;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
@@ -128,7 +127,7 @@ public class JobControllerTest {
         taskService.complete(task.getId(), taskVariables);
 
         // Verify email
-        //Assert.assertEquals(1, wiser.getMessages().size());
+        Assert.assertEquals(1, wiser.getMessages().size());
 
 
         task = taskService.createTaskQuery()
