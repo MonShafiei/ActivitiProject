@@ -94,24 +94,9 @@ InitializingBean usersAndGroupsInitializer(final IdentityService identityService
 }
 ```
 
-Start the application. 
-I just want to stand still for a moment how cool this is. Just by adding one dependency, you�re getting the whole Activiti REST API embedded in your application!
-
-Let�s make it even cooler, and add following dependency
-
-```maven
-<dependency>
-    <groupId>org.activiti</groupId>
-    <artifactId>spring-boot-starter-actuator</artifactId>
-    <version>${activiti.version}</version>
-</dependency>
-```
-
-This adds a Spring Boot actuator endpoint for Activiti. If we restart the application, and hit http://localhost:8080/activiti/, we get some basic stats about our processes. With some imagination that in a live system you�ve got many more process definitions deployed and executing, you can see how this is useful.
 
 
-
-To finish our coding, let's create a dedicated REST endpoint for our hire process.
+Let's create a dedicated REST endpoint for our hire process.
 ```
 @RequestMapping(method = RequestMethod.GET)//,produces = MediaType.APPLICATION_JSON_VALUE)
     public String saveNewCandidateGetMethod(@Valid Candidate candidate, Errors errors) {
