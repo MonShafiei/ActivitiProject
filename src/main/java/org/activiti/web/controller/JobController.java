@@ -19,7 +19,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/job",consumes = {"text/plain", "application/*"})
-// consumes = {"text/plain", "application/*"}
 public class JobController {
 
     @Autowired
