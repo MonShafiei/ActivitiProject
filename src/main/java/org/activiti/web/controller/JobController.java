@@ -17,9 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Mohsen on 18/10/27.
- */
 @RestController
 @RequestMapping(value = "/job",consumes = {"text/plain", "application/*"})
 // consumes = {"text/plain", "application/*"}
@@ -47,9 +44,7 @@ public class JobController {
 
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("candidate", candidate);
-
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("process", variables);
-
 
         return "OK";
     }
@@ -69,11 +64,8 @@ public class JobController {
 
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("candidate", candidate);
-
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("process", variables);
 
-
-//        runtimeService.startProcessInstanceByMessage(message, variables);
         return "OK";
     }
 }

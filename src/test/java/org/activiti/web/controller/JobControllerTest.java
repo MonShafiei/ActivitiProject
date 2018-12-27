@@ -1,6 +1,5 @@
 package org.activiti.web.controller;
 
-import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -31,9 +30,6 @@ public class JobControllerTest {
 
     @Autowired
     private TaskService taskService;
-
-    @Autowired
-    private HistoryService historyService;
 
     @Autowired
     private CandidateRepository candidateRepository;
@@ -131,10 +127,6 @@ public class JobControllerTest {
                 .singleResult();
         Assert.assertEquals("Get Complete Informatin", task.getName());
         taskService.complete(task.getId());
-
-
-        // Verify process completed
-        //Assert.assertEquals(1, historyService.createHistoricProcessInstanceQuery().finished().count());
 
     }
 

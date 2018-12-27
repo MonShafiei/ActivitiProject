@@ -6,10 +6,6 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 
-/**
- * Created by Mohsen on 18/12/23.
- */
-
 @Entity
 @Table(name = "Candidates")
 public class Candidate {
