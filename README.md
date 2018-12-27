@@ -1,4 +1,8 @@
 # Quickstart
+## Attention
+Server port of this project is "8888".
+example : 
+localhost:8888/...
 ## Preface
 This document will describe how to get started with activiti and spring-boot.
 
